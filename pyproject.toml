@@ -1,0 +1,29 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/directadmin"]
+
+
+[project]
+name = "directadmin-cli"
+version = "0.1.5"
+description = "DirectAdmin Python CommandLine tools"
+authors = [
+    {"name" = "Milad Khoshdel", "email" = "miladkhoshdel@gmail.com"}
+]
+maintainers = [
+    {"name" = "Milad Khoshdel", "email" = "miladkhoshdel@gmail.com"}
+]
+readme = "README.md"
+dependencies = [
+  "requests"
+]
+keywords = ["directadmin", "da"]
+requires-python = ">= 3.8"
+license = {text = "MIT License"}
+
+[project.urls]
+Homepage = "https://github.com/Miladkhoshdel/directadmin-cli"
+Issues = "https://github.com/Miladkhoshdel/directadmin-cli/issues"
