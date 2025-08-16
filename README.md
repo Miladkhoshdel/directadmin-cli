@@ -1,22 +1,26 @@
 # DirectAdminAPIClient
 
-The `directadmin-cli` package provides a convenient interface for interacting with the DirectAdmin API. `BaseDirectAdminAPIClient` extends the `BaseDirectAdminAPIClient` class to offer specific methods for managing and retrieving information about resellers, admins, users, and various account types.
+A lightweight Python client for the DirectAdmin HTTP API. DirectAdminAPIClient (which extends BaseDirectAdminAPIClient) provides convenience methods for managing admins, resellers, users, packages and account actions.
+
+Highlights:
+- Simple programmatic access to common DirectAdmin endpoints
+- Thin wrapper around requests for easy customization
+- Small, focused surface for account and package management
+
+## Requirements
+- Python 3.8+
+- requests
 
 ## Installation
-
-To use this client, you'll need to have Python installed along with the `requests` library. You can install the required library using pip:
 
 ```bash
 pip install directadmin-cli
 ```
 
-## Usage
-
-### Initialization
+## Quick start
 
 ```python
 from directadmin.client import DirectAdminAPIClient
-
 
 client = DirectAdminAPIClient(
     server="https://your-directadmin-server.com",
@@ -27,63 +31,64 @@ client = DirectAdminAPIClient(
 )
 ```
 
-### Properties
+## Basic usage
 
-- get_all_resellers: Retrieves a list of all resellers.
-- get_all_admins: Retrieves a list of all admins.
-- get_all_users: Retrieves a list of all users.
-- get_all_reseller_packages: Retrieves a list of all reseller packages.
-- get_all_user_packages: Retrieves a list of all user packages.
-- get_reseller_ip_list: Retrieves a list of IP addresses associated with resellers.
-- get_admin_stats: Retrieves statistics for the admin.
-- suspend_account: Suspend account
-- active_account: Active account
-
-### Methods
-
-- get_reseller_package(package_name: str) -> Dict[str, Any]: Retrieves information about a specific reseller package by name.
-- get_user_package(package_name: str) -> Dict[str, Any]: Retrieves information about a specific user package by name.
-- get_user_config(username: str) -> Dict[str, Any]: Retrieves configuration details for a specific user.
-- get_user_usage(username: str) -> Dict[str, Any]: Retrieves usage statistics for a specific user.
-- get_user_domain(username: str) -> Dict[str, Any]: Retrieves domain information for a specific user.
-- create_admin_account(username: str, email: str, passwd: str, notify: str) -> Dict[str, Any]: Creates a new admin account with the specified details.
-- create_reseller_account(username: str, email: str, passwd: str, notify: str, ip: str, package: str, domain: str) -> Dict[str, Any]: Creates a new reseller account with the specified details. The ip parameter must be one of "shared", "sharedreseller", or "assign".
-- create_user_account(username: str, email: str, passwd: str, notify: str, ip: str, package: str, domain: str) -> Dict[str, Any]: Creates a new user account with the specified details.
-
-## Example
+Retrieve all users:
 
 ```python
-from directadmin.client import DirectAdminAPIClient
-
-# Initialize the client
-client = DirectAdminAPIClient(
-    server="https://your-directadmin-server.com",
-    username="your-username",
-    password="your-password"
-)
-
-# Retrieve all users
-users = client.get_all_users
+users = client.get_all_users()  # call the method
 print("Users:", users)
+```
 
-# Create a new user account
-response = client.create_user_account(
+Create a new user:
+
+```python
+resp = client.create_user_account(
     username="newuser",
     email="newuser@example.com",
     passwd="securepassword",
     notify="no",
-    ip="shared",
+    ip="shared",           # one of: "shared", "sharedreseller", "assign"
     package="default",
     domain="newuserdomain.com"
 )
-print("Create User Response:", response)
+print("Create user response:", resp)
 ```
 
-## License
-This project is licensed under the Apache License. See the LICENSE file for details.
+## Methods (summary)
+
+- get_all_resellers() -> List[Dict]: List all resellers.
+- get_all_admins() -> List[Dict]: List all admins.
+- get_all_users() -> List[Dict]: List all users.
+- get_all_reseller_packages() -> List[Dict]
+- get_all_user_packages() -> List[Dict]
+- get_reseller_ip_list() -> List[str]
+- get_admin_stats() -> Dict
+- suspend_account(username: str) -> Dict
+- activate_account(username: str) -> Dict
+
+Utility methods:
+- get_reseller_package(package_name: str) -> Dict
+- get_user_package(package_name: str) -> Dict
+- get_user_config(username: str) -> Dict
+- get_user_usage(username: str) -> Dict
+- get_user_domain(username: str) -> Dict
+- create_admin_account(username: str, email: str, passwd: str, notify: str) -> Dict
+- create_reseller_account(username: str, email: str, passwd: str, notify: str, ip: str, package: str, domain: str) -> Dict
+- create_user_account(username: str, email: str, passwd: str, notify: str, ip: str, package: str, domain: str) -> Dict
+
+Return types are approximations — check responses for the exact structure. Methods raise exceptions on network or HTTP errors (requests exceptions or custom client exceptions).
+
+## Notes & best practices
+- Use HTTPS (ssl=True) and a dedicated API account.
+- Validate package and ip values before calling create_* methods.
+- Wrap calls in try/except to handle network/HTTP errors.
 
 ## Contributing
-Contributions are welcome! Please fork the repository and submit a pull request with your changes.
+Contributions welcome. Fork the repo, create a branch, add tests and submit a pull request.
 
-C## ontact
-For any questions or support, please contact miladkhoshdel@gmail.com.
+## License
+Apache License (see LICENSE file).
+
+## Contact
+For questions or support: miladkhoshdel@gmail.com
