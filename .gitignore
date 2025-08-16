@@ -2,3 +2,4 @@
 .idea
 .pre-commit-config.yaml
 dist
+__pycache__/
