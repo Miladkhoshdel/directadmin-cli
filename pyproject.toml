@@ -43,7 +43,7 @@ dependencies = [
 ]
 keywords = ["directadmin", "da"]
 requires-python = ">= 3.8"
-license = {text = "MIT License"}
+license = {text = "Apache-2.0"}
 
 [project.urls]
 Homepage = "https://github.com/Miladkhoshdel/directadmin-cli"
