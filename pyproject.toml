@@ -2,8 +2,29 @@
 requires = ["hatchling"]
 build-backend = "hatchling.build"
 
+[tool.hatch.build]
+exclude = [
+  "/venv",
+  "/.venv",
+  "/dist",
+  "/build",
+  "/.git",
+  "/.github",
+  "__pycache__",
+  "*.pyc",
+  ".DS_Store",
+]
+
 [tool.hatch.build.targets.wheel]
 packages = ["src/directadmin"]
+
+[tool.hatch.build.targets.sdist]
+include = [
+  "src/**",
+  "README.md",
+  "LICENSE",
+  "pyproject.toml",
+]
 
 
 [project]
