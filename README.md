@@ -36,6 +36,8 @@ client = DirectAdminAPIClient(
 - get_all_user_packages: Retrieves a list of all user packages.
 - get_reseller_ip_list: Retrieves a list of IP addresses associated with resellers.
 - get_admin_stats: Retrieves statistics for the admin.
+- suspend_account: Suspend account
+- active_account: Active account
 
 ### Methods
 

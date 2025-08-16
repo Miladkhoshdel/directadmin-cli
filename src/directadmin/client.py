@@ -19,6 +19,7 @@ from .endpoints import (
     GET_USER_USAGE,
     GET_USER_DOMAIN,
     CREATE_USER_ACCOUNT,
+    ACTIVE_DEACTIVE_USER,
 )
 
 
@@ -154,9 +155,7 @@ class DirectAdminAPIClient(BaseDirectAdminAPIClient):
                 A dictionary containing details of the reseller package.
         """
         params = {"package": package_name}
-        return self._make_request(
-            endpoint=GET_RESELLER_PACKAGES, params=params
-        )
+        return self._make_request(endpoint=GET_RESELLER_PACKAGES, params=params)
 
     def get_user_package(self, package_name: str) -> Dict[str, Any]:
         """
@@ -291,9 +290,7 @@ class DirectAdminAPIClient(BaseDirectAdminAPIClient):
             "ip": ip,
             "notify": notify,
         }
-        return self._make_request(
-            endpoint=CREATE_RESELLER_ACCOUNT, params=params
-        )
+        return self._make_request(endpoint=CREATE_RESELLER_ACCOUNT, params=params)
 
     def create_user_account(
         self,
@@ -335,3 +332,65 @@ class DirectAdminAPIClient(BaseDirectAdminAPIClient):
             "notify": notify,
         }
         return self._make_request(endpoint=CREATE_USER_ACCOUNT, params=params)
+
+    def suspend_account(self, *args) -> Dict[str, Any]:
+        """Suspend one or more user accounts.
+
+        Sends a request to the DirectAdmin ACTIVE_DEACTIVE_USER endpoint to suspend the
+        specified user accounts. The request will include the parameter "dosuspend" set
+        to "1" and each provided username will be added as a "select{index}" parameter,
+        where index starts at 0.
+
+        Args:
+            *args: One or more username strings to suspend.
+
+        Returns:
+            Dict[str, Any]: The response returned by self._make_request (format depends on the API).
+
+        Raises:
+            Exception: Propagates any exception raised by self._make_request (e.g., network errors or API errors).
+
+        Example:
+            suspend_account('alice', 'bob')
+        """
+        params = {
+            "dosuspend": "1",
+        }
+
+        for index, user in enumerate(args):
+            params[f"select{index}"] = user
+
+        return self._make_request(endpoint=ACTIVE_DEACTIVE_USER, params=params)
+
+    def active_account(self, *args) -> Dict[str, Any]:
+        """
+        Reactivate one or more user accounts via the DirectAdmin API.
+
+        This method prepares parameters to "undo suspend" (i.e., activate) the specified
+        user accounts and sends a request to the ACTIVE_DEACTIVE_USER endpoint.
+
+        Args:
+            *args: Variable length argument list of usernames (str). Each username will
+                be added to the request parameters as "select{index}" (e.g., "select0",
+                "select1", ...). At least one username should be provided.
+
+        Returns:
+            Dict[str, Any]: The parsed response from the API call as returned by
+            self._make_request.
+
+        Raises:
+            Any exceptions raised by self._make_request (e.g., network or API errors)
+            are propagated to the caller.
+
+        Example:
+            client.active_account('alice', 'bob')
+            # sends parameters: {"dounsuspend": "1", "select0": "alice", "select1": "bob"}
+        """
+        params = {
+            "dounsuspend": "1",
+        }
+
+        for index, user in enumerate(args):
+            params[f"select{index}"] = user
+
+        return self._make_request(endpoint=ACTIVE_DEACTIVE_USER, params=params)
