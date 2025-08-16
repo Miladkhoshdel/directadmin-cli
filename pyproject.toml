@@ -29,7 +29,7 @@ include = [
 
 [project]
 name = "directadmin-cli"
-version = "0.1.6"
+version = "0.1.7"
 description = "Command-line interface for DirectAdmin written in Python — provides API-driven automation and utilities for server, user, domain, and DNS management."
 authors = [
     {"name" = "Milad Khoshdel", "email" = "miladkhoshdel@gmail.com"}
